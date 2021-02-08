@@ -1,0 +1,30 @@
+<?php
+
+$ip = "127.0.0.1";
+$Usuario = "root";
+$Password = "";
+$db_nombre = "db_prueba";
+$puerto = "3306";
+
+$connect = mysqli_connect($ip,$Usuario,$Password,$db_nombre,$puerto); #Como verá la conexión es en localhost con el usuario root de toda la vida y sin contraseña
+#Lo que se debería modificar es el usuario, contraseña, nombre de la base de datos y porsupuesto el puerto.
+
+$res = $connect->query("select * from clientes"); #Se realiza la consulta
+
+$renglones = array(); #Un arreglo que guardará lo que devuelve
+
+while ($row = mysqli_fetch_array($res,MYSQLI_ASSOC)){ #Un while que rellena el array con los elementos que devuelve
+
+    #$row["EMPRESA"] = utf8_decode($row["EMPRESA"]);
+    #$row["RESPONSABLE"] = utf8_decode($row["RESPONSABLE"]);
+    array_push($renglones, $row); 
+
+}
+
+header("Content-Type: application/json");
+#Me devuelve un json al cual le metí un montón de constantes para no tener problemas con la base de datos que tengo de prueba
+echo json_encode($renglones, JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS|JSON_HEX_QUOT|JSON_NUMERIC_CHECK|JSON_BIGINT_AS_STRING|JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE|JSON_PARTIAL_OUTPUT_ON_ERROR|JSON_PRESERVE_ZERO_FRACTION);
+
+$connect->close(); 
+
+?>  
